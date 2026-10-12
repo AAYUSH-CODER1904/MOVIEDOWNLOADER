@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <meta content="CineGate — Direct Cinema Link Gateway" name="description"/>
+  <title>CineGate — Direct Cinema Link Gateway</title>
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#111317",
+            "surface-dim": "#111317",
+            "surface-bright": "#37393d",
+            "surface-container-lowest": "#0c0e11",
+            "surface-container-low": "#1a1c1f",
+            "surface-container": "#1e2023",
+            "surface-container-high": "#282a2d",
+            "surface-container-highest": "#333538",
+            "surface-variant": "#333538",
+            "on-surface": "#e2e2e6",
+            "on-surface-variant": "#c2c6d6",
+            "primary": "#adc6ff",
+            "primary-container": "#4d8eff",
+            "on-primary": "#002e6a",
+            "on-primary-container": "#00285d",
+            "secondary": "#a4c9ff",
+            "secondary-container": "#0267b8",
+            "outline": "#8c909f",
+            "outline-variant": "#424754",
+            "error": "#ffb4ab",
+            "error-container": "#93000a",
+            "electric": "#3b82f6",
+            "electric-hover": "#60a5fa"
+          },
+          fontFamily: {
+            display: ["Geist", "sans-serif"],
+            body: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css"/>
+  <style>
+    body {
+      background-color: #111317;
+      color: #e2e2e6;
+      font-family: 'Inter', sans-serif;
+      min-height: 100dvh;
+      overscroll-behavior: none;
+    }
+    h1, h2, h3, h4, h5, .font-heading {
+      font-family: 'Geist', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen relative selection:bg-primary/30">
+
+  <!-- TOP HEADER -->
+  <header class="fixed top-0 w-full z-40 bg-surface/85 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_1px_8px_rgba(0,0,0,0.4)]">
+    <div class="h-16 max-w-lg mx-auto px-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary-container to-primary flex items-center justify-center shadow-[0_0_16px_rgba(77,142,255,0.4)]">
+          <span class="material-symbols-outlined text-surface-container-lowest font-bold text-[22px]">play_circle</span>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5">
+            <span class="font-heading font-bold text-lg tracking-tight leading-none text-white">CineGate</span>
+            <span class="text-[10px] font-bold text-primary px-1.5 py-0.5 rounded-full bg-primary/10 tracking-wider uppercase">HUB</span>
+          </div>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-[11px] text-on-surface-variant font-medium">Gateway Active</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-1">
+        <button onclick="toggleHowItWorks()" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-white hover:bg-white/[0.04] transition-all" aria-label="Help">
+          <span class="material-symbols-outlined text-[20px]">help_outline</span>
+        </button>
+        <button onclick="focusInput()" class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-white hover:bg-white/[0.04] transition-all" aria-label="Search">
+          <span class="material-symbols-outlined text-[20px]">search</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ATMOSPHERIC BACKGROUND -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[520px] h-[520px] rounded-full bg-primary/10 blur-[130px] animate-pulseGlow"></div>
+    <div class="absolute top-1/2 -right-24 w-80 h-80 rounded-full bg-secondary-container/15 blur-[110px]"></div>
+    <div class="absolute bottom-10 -left-20 w-72 h-72 rounded-full bg-primary-container/10 blur-[100px]"></div>
+    <div class="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#adc6ff_1px,transparent_1px)] [background-size:24px_24px]"></div>
+  </div>
+
+  <!-- MAIN VIEWPORT CONTAINER -->
+  <main class="flex-1 flex flex-col relative w-full pt-20 pb-24 z-10">
+
+    <!-- TEASER BACKGROUND CARDS (Decorative Depth) -->
+    <div class="relative w-full max-w-md mx-auto px-4 pt-2 pb-4 flex flex-col gap-2.5 opacity-35 blur-[2px] scale-[0.98] transition-all pointer-events-none select-none">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-primary"></span>
+          <span class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">Screening Vault 04</span>
+        </div>
+        <span class="text-[10px] font-bold text-primary bg-surface-container-highest px-2 py-0.5 rounded-full">4K Remaster</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="relative h-36 rounded-xl overflow-hidden bg-surface-container shadow-md border border-white/5">
+          <img class="w-full h-full object-cover opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAt0qmxdy0rGYeuY5qkZgS-mbAFqPVqvYi89EigEvylS-FaWZIfG7gAonOe1jD9X4quSbuQBeF4H4iPHwZ0ZH4OWeltdQ0-XPSVwtN6x-TOgMN20LlZjHgJrOPU0SWvXhn2WdhaX72FCiGGaWnH_y9ykW8CsMiRwelLuWNCdpOZi0Rg1Za7P0lBV54SOrTP0qnMcsos96a1bWWP4ynyp87kCs5KIJ293_SNOmzqGFFeXi8HwWPOILjZWQ" alt="Dune 2 Preview"/>
+          <div class="absolute bottom-2 left-2 right-2 p-1.5 rounded-lg bg-surface-container-lowest/80 backdrop-blur-md">
+            <p class="font-heading text-xs text-white truncate font-semibold">#101 Dune: Part Two</p>
+            <p class="text-[10px] text-primary">IMAX 70mm Master</p>
+          </div>
+        </div>
+        <div class="relative h-36 rounded-xl overflow-hidden bg-surface-container shadow-md border border-white/5">
+          <img class="w-full h-full object-cover opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAelCxf0B5Y5EQnn9T16iATXqDt8lo5oYh5j3qM-IVl_9ULa2rl-pBEArI6PTPx7wQ6GLaxVgqdSxaN46Yxxh8geZb_UYoHIl8LcNgfxR989jrsjRYvQu0wzZqnZgCSIyvYZBO1c9ixPAQP1WxnDv6o9Yw474YfOY3GeKwSBjYJHBT1FwiJkgLA2kkNou4KnkroDHpJoEj-LGPUBnzsT3b831wzQDWSKIZ4fhqOMznRD6Y4rvjNxVpt2w" alt="Interstellar Preview"/>
+          <div class="absolute bottom-2 left-2 right-2 p-1.5 rounded-lg bg-surface-container-lowest/80 backdrop-blur-md">
+            <p class="font-heading text-xs text-white truncate font-semibold">#102 Interstellar</p>
+            <p class="text-[10px] text-primary">Nolan 4K Vault</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low/70 text-on-surface-variant border border-white/5">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[16px] text-emerald-400">verified</span>
+          <span class="text-xs">CineGate Verified Indexer</span>
+        </div>
+        <span class="text-[10px] font-mono tracking-wider text-outline">LATENCY 6MS</span>
+      </div>
+    </div>
+
+    <!-- CENTERPIECE HERO POP-UP MODAL CARD -->
+    <div class="relative z-20 w-full max-w-md mx-auto px-4 -mt-36 pb-6 flex flex-col items-center">
+      <div class="w-full rounded-2xl bg-surface-container-low/95 backdrop-blur-2xl p-5 shadow-2xl border border-white/[0.08] flex flex-col gap-4 relative overflow-hidden transition-all duration-300">
+        
+        <!-- Top Edge Glow Aura -->
+        <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-48 h-20 bg-primary/25 rounded-full blur-2xl pointer-events-none"></div>
+
+        <!-- Traffic Source Micro-Badge Banner -->
+        <div class="flex items-center justify-between w-full py-1.5 px-2.5 rounded-lg bg-surface-container-lowest/90 border border-white/[0.04]">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-highest shadow-sm">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+              <span class="text-[10px] font-heading font-bold text-on-surface uppercase tracking-wider">IG Reel</span>
+            </div>
+            <div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-highest shadow-sm">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+              <span class="text-[10px] font-heading font-bold text-on-surface uppercase tracking-wider">YT Short</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1 text-primary">
+            <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+            <span class="text-xs font-semibold tracking-tight">Direct Gateway</span>
+          </div>
+        </div>
+
+        <!-- Header Content -->
+        <div class="flex flex-col gap-1 text-left pt-0.5">
+          <div class="flex items-center justify-between">
+            <h1 class="font-heading text-2xl font-bold text-white tracking-tight">
+              Unlock Movie &amp; Download
+            </h1>
+            <span class="p-1 rounded-full bg-surface-container text-primary flex items-center justify-center">
+              <span class="material-symbols-outlined text-[18px]">lock_open</span>
+            </span>
+          </div>
+          <p class="text-xs text-on-surface-variant leading-relaxed">
+            Enter the 3 or 4-digit code from the reel or short you watched to instantly unlock direct 4K/1080p download links.
+          </p>
+        </div>
+
+        <!-- Modality Switcher Tabs -->
+        <div class="flex items-center gap-1.5 p-1 rounded-xl bg-surface-container-lowest border border-white/[0.04] w-full" role="tablist">
+          <button class="flex-1 py-1.5 px-2 rounded-lg text-xs font-heading font-semibold text-on-primary bg-primary-container shadow-sm transition-all text-center flex items-center justify-center gap-1" id="tab-code" onclick="setMode('code')">
+            <span class="material-symbols-outlined text-[14px]">tag</span>
+            <span>Code #</span>
+          </button>
+          <button class="flex-1 py-1.5 px-2 rounded-lg text-xs font-heading text-on-surface-variant hover:text-white transition-all text-center flex items-center justify-center gap-1" id="tab-movie" onclick="setMode('movie')">
+            <span class="material-symbols-outlined text-[14px]">search</span>
+            <span>Movie Name</span>
+          </button>
+          <button class="flex-1 py-1.5 px-2 rounded-lg text-xs font-heading text-on-surface-variant hover:text-white transition-all text-center flex items-center justify-center gap-1" id="tab-direct" onclick="setMode('direct')">
+            <span class="material-symbols-outlined text-[14px]">link</span>
+            <span>Reel URL</span>
+          </button>
+        </div>
+
+        <!-- High-Contrast Input Container -->
+        <div class="flex flex-col gap-2" id="input-container-block">
+          <div class="relative flex items-center w-full rounded-xl bg-surface-container-lowest border border-white/[0.08] shadow-inner focus-within:border-primary focus-within:shadow-[0_0_20px_rgba(173,198,255,0.25)] transition-all" id="input-wrapper">
+            <div class="pl-3.5 pr-2 flex items-center text-primary pointer-events-none">
+              <span class="material-symbols-outlined text-[20px]" id="input-lead-icon">tag</span>
+            </div>
+            <input autocomplete="off" class="w-full bg-transparent py-3.5 pr-20 text-white font-medium text-sm placeholder:text-outline focus:outline-none" id="movie-input" placeholder="# (e.g. #101, #102, #104)" spellcheck="false" type="text" onkeydown="handleKeyDown(event)"/>
+            
+            <!-- Quick Paste Button -->
+            <div class="absolute right-2 flex items-center">
+              <button class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-white text-xs font-heading active:scale-95 transition-all shadow-sm border border-white/5" id="paste-btn" onclick="handlePaste()" type="button">
+                <span class="material-symbols-outlined text-[14px]">content_paste</span>
+                <span>PASTE</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Input helper & feedback alert slot -->
+          <div class="hidden items-center gap-2 px-3 py-2 rounded-lg bg-surface-container font-medium text-xs transition-all border" id="feedback-alert">
+            <span class="material-symbols-outlined text-[16px]" id="feedback-icon">info</span>
+            <span id="feedback-msg">Searching cinema master catalog...</span>
+          </div>
+        </div>
+
+        <!-- Electric Blue CTA Button -->
+        <button class="w-full py-3.5 px-4 rounded-xl bg-primary-container hover:bg-electric text-on-primary font-heading text-base font-semibold tracking-tight flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(77,142,255,0.3)] active:scale-[0.98] transition-all relative overflow-hidden group" id="submit-cta" onclick="triggerUnlock()" type="button">
+          <span class="relative z-10 flex items-center gap-2">
+            <span>Unlock Movie &amp; Download</span>
+            <span class="material-symbols-outlined text-[20px] transition-transform group-hover:translate-x-1">arrow_forward</span>
+          </span>
+          <span class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+        </button>
+
+        <!-- Trending Quick Access Tags from Viral Reels -->
+        <div class="flex flex-col gap-2 pt-1">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-on-surface-variant font-medium flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+              Trending from viral reels:
+            </span>
+            <span class="text-[10px] font-mono text-outline uppercase tracking-wider">LIVE 2026</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5" id="trending-pills">
+            <button class="px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-xs flex items-center gap-1 active:scale-95 transition-all border border-white/5" onclick="fillCode('#101')" type="button">
+              <span class="text-primary font-bold">#101</span>
+              <span class="text-on-surface-variant">Dune II</span>
+            </button>
+            <button class="px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-xs flex items-center gap-1 active:scale-95 transition-all border border-white/5" onclick="fillCode('#104')" type="button">
+              <span class="text-primary font-bold">#104</span>
+              <span class="text-on-surface-variant">Stree 2</span>
+            </button>
+            <button class="px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-xs flex items-center gap-1 active:scale-95 transition-all border border-white/5" onclick="fillCode('#103')" type="button">
+              <span class="text-primary font-bold">#103</span>
+              <span class="text-on-surface-variant">Oppenheimer</span>
+            </button>
+            <button class="px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-xs flex items-center gap-1 active:scale-95 transition-all border border-white/5" onclick="fillCode('#105')" type="button">
+              <span class="text-primary font-bold">#105</span>
+              <span class="text-on-surface-variant">Kantara</span>
+            </button>
+            <button class="px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface text-xs flex items-center gap-1 active:scale-95 transition-all border border-white/5" onclick="fillCode('#102')" type="button">
+              <span class="text-primary font-bold">#102</span>
+              <span class="text-on-surface-variant">Interstellar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Trust & Frictionless Guarantee -->
+        <div class="pt-1 flex flex-col gap-2">
+          <div class="p-2.5 rounded-xl bg-surface-container-lowest/80 border border-white/[0.04] flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px] text-emerald-400" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+              <span class="text-xs text-on-surface font-medium">100% Free Direct Links</span>
+            </div>
+            <div class="h-3 w-px bg-surface-variant"></div>
+            <div class="flex items-center gap-1 text-on-surface-variant">
+              <span class="material-symbols-outlined text-[14px]">speed</span>
+              <span class="text-xs font-semibold text-primary">Ultra-Fast CDN</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-center gap-2 text-center text-outline">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary/70"></span>
+            <span class="text-xs font-medium">Over 1,480,000+ movie downloads resolved</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Secondary Links -->
+      <div class="w-full flex items-center justify-between pt-4 px-2">
+        <button class="flex items-center gap-1 text-on-surface-variant hover:text-white text-xs transition-colors py-1" onclick="toggleHowItWorks()" type="button">
+          <span class="material-symbols-outlined text-[16px]">help_center</span>
+          <span>How it works</span>
+        </button>
+        <button class="flex items-center gap-1 text-on-surface-variant hover:text-primary text-xs transition-colors py-1" onclick="browseAllCatalog()" type="button">
+          <span class="material-symbols-outlined text-[16px]">view_timeline</span>
+          <span>Browse All Movies</span>
+        </button>
+      </div>
+
+      <!-- How It Works Drawer -->
+      <div class="hidden w-full mt-3 p-4 rounded-xl bg-surface-container-low border border-white/10 shadow-2xl flex-col gap-3 transition-all animate-fadeIn" id="how-it-works-drawer">
+        <div class="flex items-center justify-between">
+          <span class="font-heading text-sm text-white font-semibold">3-Step Movie Download</span>
+          <button class="text-on-surface-variant hover:text-white p-1" onclick="toggleHowItWorks()" type="button">
+            <span class="material-symbols-outlined text-[16px]">close</span>
+          </button>
+        </div>
+        <div class="flex flex-col gap-2.5 text-xs text-on-surface-variant">
+          <div class="flex items-start gap-2.5">
+            <div class="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold shrink-0 mt-0.5">1</div>
+            <p>Check the caption of the reel or short for the post code (e.g. <b>#101</b>).</p>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <div class="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold shrink-0 mt-0.5">2</div>
+            <p>Type or paste the code in the box above to immediately unlock the movie.</p>
+          </div>
+          <div class="flex items-start gap-2.5">
+            <div class="w-5 h-5 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold shrink-0 mt-0.5">3</div>
+            <p>Pick your preferred resolution (4K, 1080p, 720p) and download instantly at full speed.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- DYNAMIC UNLOCKED MOVIE DOWNLOAD MODAL (SLIDE-UP BOTTOM SHEET) -->
+  <div class="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex flex-col justify-end transition-opacity duration-300 opacity-0 pointer-events-none" id="unlocked-modal">
+    <div class="w-full max-w-lg mx-auto bg-surface-container-low rounded-t-3xl shadow-2xl border-t border-white/10 overflow-hidden flex flex-col max-h-[90vh] relative animate-slideUp">
+      
+      <!-- Grab Handle -->
+      <div class="pt-3 pb-2 flex justify-center items-center cursor-pointer" onclick="closeUnlockedModal()">
+        <div class="w-10 h-1 rounded-full bg-surface-variant"></div>
+      </div>
+
+      <!-- Modal Header -->
+      <div class="px-5 pb-3 flex items-center justify-between border-b border-white/[0.04]">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+            <span class="material-symbols-outlined text-[14px]">verified</span>
+            <span id="modal-code-tag">Gateway Verified #101</span>
+          </span>
+          <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-surface-container text-secondary text-[11px] font-bold">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            Ready for Download
+          </span>
+        </div>
+        <button aria-label="Close modal" class="w-9 h-9 rounded-full bg-surface-container-high text-on-surface-variant hover:text-white flex items-center justify-center transition-colors" onclick="closeUnlockedModal()">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- Modal Scrollable Content -->
+      <div class="overflow-y-auto px-5 py-4 pb-12 flex flex-col gap-4">
+        
+        <!-- Movie Metadata Card -->
+        <div class="bg-surface-container p-4 rounded-2xl flex gap-4 items-start shadow-md border border-white/5">
+          <div class="w-24 shrink-0 rounded-xl overflow-hidden shadow-lg bg-surface-container-lowest relative aspect-[3/4]">
+            <img id="modal-poster" alt="Movie Poster" class="w-full h-full object-cover" src=""/>
+            <div class="absolute inset-0 bg-gradient-to-t from-surface-dim/80 via-transparent to-transparent"></div>
+            <div id="modal-year-badge" class="absolute bottom-1 left-1 bg-surface-container-lowest/90 px-1.5 py-0.5 rounded text-[10px] font-heading font-bold text-primary">
+              2024
+            </div>
+          </div>
+          <div class="flex-1 min-w-0 flex flex-col">
+            <div class="flex items-center gap-1.5 mb-1 flex-wrap">
+              <span id="modal-rating-guide" class="px-1.5 py-0.5 rounded bg-surface-bright text-white text-[10px] font-bold">PG-13</span>
+              <span id="modal-runtime" class="text-xs text-on-surface-variant">2h 46m</span>
+              <span class="text-surface-variant">•</span>
+              <span id="modal-genres" class="text-xs text-on-surface-variant truncate">Sci-Fi / Adventure</span>
+            </div>
+            <h2 id="modal-title" class="font-heading text-lg font-bold text-white tracking-tight leading-snug">
+              Dune: Part Two
+            </h2>
+            <div class="flex items-center gap-1.5 mt-1.5 mb-2">
+              <div class="flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container-high text-primary text-xs font-semibold">
+                <span class="material-symbols-outlined text-[13px] text-amber-400" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span id="modal-imdb" class="text-white">8.6</span>
+                <span id="modal-votes" class="text-on-surface-variant text-[10px]">(520K)</span>
+              </div>
+              <span class="text-[10px] font-heading font-bold px-1.5 py-0.5 rounded bg-surface-container-highest text-secondary">IMDb Verified</span>
+            </div>
+            <p id="modal-synopsis" class="text-xs text-on-surface-variant line-clamp-3 leading-relaxed">
+              Paul Atreides unites with Chani and the Fremen while seeking revenge against the conspirators who destroyed his family.
+            </p>
+          </div>
+        </div>
+
+        <!-- Director & Cast details -->
+        <div class="px-1 flex flex-col gap-1 text-xs text-on-surface-variant">
+          <p><span class="text-white font-medium">Director:</span> <span id="modal-director">Denis Villeneuve</span></p>
+          <p class="truncate"><span class="text-white font-medium">Starring:</span> <span id="modal-cast">Timothée Chalamet, Zendaya</span></p>
+        </div>
+
+        <!-- High-Speed CDN Status Chip -->
+        <div class="flex items-center justify-between p-3 rounded-xl bg-surface-container-high border border-outline-variant/30">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[18px]">bolt</span>
+            <div class="flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="modal-cdn-server" class="text-xs text-white font-medium">High-Speed CDN #1 Active (42 MB/s)</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container-lowest text-secondary text-[10px] font-bold">
+            <span class="material-symbols-outlined text-[12px]">lock</span>
+            <span>Direct Mirror</span>
+          </div>
+        </div>
+
+        <!-- Download & Stream Options Section -->
+        <div class="flex flex-col gap-2.5 mt-1">
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+              <h3 class="font-heading text-sm text-white font-bold">Download &amp; Stream</h3>
+              <span class="text-[11px] text-on-surface-variant">Permanent High-Speed Mirrors</span>
+            </div>
+            <span class="text-[10px] font-heading font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full uppercase tracking-wider">ALL MIRRORS ONLINE</span>
+          </div>
+
+          <!-- Dynamic Download Buttons injected by app.js -->
+          <div class="flex flex-col gap-2.5" id="download-cards-container">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Secondary Action Buttons -->
+        <div class="grid grid-cols-2 gap-2.5 pt-2">
+          <button class="w-full h-11 rounded-xl bg-surface-container-high hover:bg-surface-bright text-white text-xs font-heading font-semibold flex items-center justify-center gap-2 transition-colors border border-white/10 active:scale-[0.98]" id="modal-stream-btn" onclick="triggerStream()">
+            <span class="material-symbols-outlined text-[18px] text-primary">play_circle</span>
+            <span>Stream Now</span>
+          </button>
+          <button class="w-full h-11 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-white text-xs font-heading font-semibold flex items-center justify-center gap-2 transition-colors border border-white/10 active:scale-[0.98]" id="copy-cdn-btn" onclick="copyCdnLink()">
+            <span class="material-symbols-outlined text-[17px] text-primary">link</span>
+            <span id="copy-cdn-text">Copy CDN Link</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM MOBILE NAVIGATION BAR -->
+  <nav class="fixed bottom-0 w-full z-40 bg-surface/90 backdrop-blur-xl border-t border-white/[0.06] shadow-[0_-2px_12px_rgba(0,0,0,0.5)]">
+    <div class="flex justify-around items-center h-16 max-w-lg mx-auto px-4">
+      <a class="flex flex-col items-center justify-center gap-1 text-primary" href="#">
+        <span class="material-symbols-outlined text-[20px]">door_sliding</span>
+        <span class="text-[11px] font-medium font-heading">Gateway</span>
+      </a>
+      <a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:text-white transition-all" href="#" onclick="browseAllCatalog()">
+        <span class="material-symbols-outlined text-[20px]">movie</span>
+        <span class="text-[11px] font-medium font-heading">Movies</span>
+      </a>
+      <a class="flex flex-col items-center justify-center gap-1 text-on-surface-variant hover:text-white transition-all" href="#" onclick="toggleHowItWorks()">
+        <span class="material-symbols-outlined text-[20px]">help</span>
+        <span class="text-[11px] font-medium font-heading">Guide</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Load Dynamic App Controller -->
+  <script src="app.js"></script>
+</body>
+</html>
